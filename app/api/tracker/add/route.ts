@@ -32,8 +32,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Create new application
-    const { data, error } = await supabase
-      .from('applications')
+    const { data, error } = await (supabase
+      .from('applications') as any)
       .insert({
         user_id: defaultUserId,
         job_id,

@@ -18,13 +18,15 @@ export async function GET(request: NextRequest) {
 
     if (error) throw error;
 
+    const appsData = applications as any[];
+
     // Group by status for Kanban view
     const grouped = {
-      saved: applications?.filter((app) => app.status === 'saved') || [],
-      applied: applications?.filter((app) => app.status === 'applied') || [],
-      interviewing: applications?.filter((app) => app.status === 'interviewing') || [],
-      offer: applications?.filter((app) => app.status === 'offer') || [],
-      rejected: applications?.filter((app) => app.status === 'rejected') || [],
+      saved: appsData?.filter((app) => app.status === 'saved') || [],
+      applied: appsData?.filter((app) => app.status === 'applied') || [],
+      interviewing: appsData?.filter((app) => app.status === 'interviewing') || [],
+      offer: appsData?.filter((app) => app.status === 'offer') || [],
+      rejected: appsData?.filter((app) => app.status === 'rejected') || [],
     };
 
     return NextResponse.json({

@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
             const enrichedJob = await enrichJobWithEmbedding(job);
 
             // Insert or update in database
-            const { error } = await supabase.from('jobs').upsert(
+            const { error } = await (supabase.from('jobs') as any).upsert(
               {
                 source_id: enrichedJob.source_id,
                 title: enrichedJob.title,
@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       count: data?.length || 0,
-      last_refresh: latestJob?.scraped_at || null,
+      last_refresh: (latestJob as any)?.scraped_at || null,
     });
   } catch (error: any) {
     console.error('Error getting job stats:', error);

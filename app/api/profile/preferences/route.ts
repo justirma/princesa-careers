@@ -31,6 +31,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const profileData = profile as any;
+
     // Update profile with new preferences
     const updateData: any = {};
 
@@ -43,17 +45,17 @@ export async function POST(request: NextRequest) {
     // Regenerate embedding with updated preferences
     if (desired_titles) {
       const embedding = await generateProfileEmbedding({
-        skills: profile.skills,
-        experience_summary: profile.experience_summary,
+        skills: profileData.skills,
+        experience_summary: profileData.experience_summary,
         desired_titles: desired_titles,
       });
       updateData.embedding = `[${embedding.join(',')}]`;
     }
 
-    const { data, error } = await supabase
-      .from('user_profile')
+    const { data, error } = await (supabase
+      .from('user_profile') as any)
       .update(updateData)
-      .eq('id', profile.id)
+      .eq('id', profileData.id)
       .select()
       .single();
 

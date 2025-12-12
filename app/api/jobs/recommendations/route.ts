@@ -24,7 +24,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!profile.embedding) {
+    const profileData = profile as any;
+
+    if (!profileData.embedding) {
       return NextResponse.json(
         { error: 'Profile embedding not found. Please re-upload your resume.' },
         { status: 400 }
@@ -48,11 +50,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Parse embeddings and calculate similarity scores
-    const profileEmbedding = typeof profile.embedding === 'string'
-      ? JSON.parse(profile.embedding)
-      : profile.embedding;
+    const profileEmbedding = typeof profileData.embedding === 'string'
+      ? JSON.parse(profileData.embedding)
+      : profileData.embedding;
 
-    const jobsWithScores = jobs
+    const jobsWithScores = (jobs as any[])
       .map((job) => {
         try {
           const jobEmbedding = typeof job.job_embedding === 'string'
@@ -65,7 +67,7 @@ export async function GET(request: NextRequest) {
           let matchesFilters = true;
 
           // Remote filter
-          if (profile.remote_only) {
+          if (profileData.remote_only) {
             const locationLower = (job.location || '').toLowerCase();
             if (!locationLower.includes('remote') && !locationLower.includes('anywhere')) {
               matchesFilters = false;
@@ -73,7 +75,7 @@ export async function GET(request: NextRequest) {
           }
 
           // Title matching (boost score if title matches desired titles)
-          const titleBoost = profile.desired_titles?.some((desiredTitle: string) =>
+          const titleBoost = profileData.desired_titles?.some((desiredTitle: string) =>
             job.title.toLowerCase().includes(desiredTitle.toLowerCase())
           ) ? 0.1 : 0;
 

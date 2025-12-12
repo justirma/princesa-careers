@@ -1,3 +1,4 @@
+// @ts-ignore
 import pdf from 'pdf-parse/lib/pdf-parse.js';
 
 export async function extractTextFromPDF(buffer: Buffer): Promise<string> {

@@ -26,8 +26,8 @@ export async function POST(request: NextRequest) {
       updateData.notes = notes;
     }
 
-    const { data, error } = await supabase
-      .from('applications')
+    const { data, error } = await (supabase
+      .from('applications') as any)
       .update(updateData)
       .eq('id', application_id)
       .select()

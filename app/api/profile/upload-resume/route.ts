@@ -63,10 +63,10 @@ export async function POST(request: NextRequest) {
     let result;
     if (existingProfile) {
       // Update existing profile
-      const { data, error } = await supabase
-        .from('user_profile')
+      const { data, error } = await (supabase
+        .from('user_profile') as any)
         .update(profileData)
-        .eq('id', existingProfile.id)
+        .eq('id', (existingProfile as any).id)
         .select()
         .single();
 
@@ -74,8 +74,8 @@ export async function POST(request: NextRequest) {
       result = data;
     } else {
       // Create new profile
-      const { data, error } = await supabase
-        .from('user_profile')
+      const { data, error } = await (supabase
+        .from('user_profile') as any)
         .insert(profileData)
         .select()
         .single();
